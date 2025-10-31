@@ -1,6 +1,14 @@
-# Delete the book titled "Nineteen Eighty-Four"
-book = Book.objects.get(title="Nineteen Eighty-Four")
-book.delete()   # Deletes the object
+# Delete a Book From the Database
 
-# Confirm deletion by fetching all books again
+```python
+from bookshelf.models import Book
+
+# Retrieve the book you want to delete
+book = Book.objects.get(title="Nineteen Eighty-Four")
+
+# Delete the book
+book.delete()
+
+# Confirm deletion
 Book.objects.all()
+
