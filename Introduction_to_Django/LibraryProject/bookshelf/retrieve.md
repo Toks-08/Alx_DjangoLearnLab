@@ -1,15 +1,9 @@
-# Retrieve and Display Book Attributes
-
-The following Python commands retrieve the first book object from the QuerySet and display its individual attributes:
+# Retrieve a Book From the Database
 
 ```python
-book_instance = books.first()
+from bookshelf.models import Book
 
-print(f"Title: {book_instance.title}")
-print(f"Author: {book_instance.author}")
-print(f"Publication Year: {book_instance.publication_year}")
+# Retrieve a specific book using Django ORM
+book = Book.objects.get(title="1984")
+book
 
-# Expected Output:
-# Title: 1984
-# Author: George Orwell
-# Publication Year: 1949
