@@ -10,15 +10,12 @@ for book in books:
     print("-", book.title)
 
 
-# List all books in a library
+# List all books in a library"
 library_name = "Central Library"
 library = Library.objects.get(name=library_name)
-books_in_library = Book.objects.filter(library=library)
 
-print("\nBooks in", library_name)
-for book in books_in_library:
-    print("-", book.title)
-
+# 👇 Using the ManyToManyField correctly
+books_in_library = library.books.all()
 
 # Retrieve the librarian for a library
 librarian = Librarian.objects.get(library=library)
