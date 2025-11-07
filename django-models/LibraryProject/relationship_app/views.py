@@ -5,10 +5,8 @@ from .models import Book, Library
 
 def book_list_view(request):
     books = Book.objects.all()
-    output = "<h2>List of Books</h2>"
-    for book in books:
-        output += f"<p><strong>{book.title}</strong> by {book.author.name}</p>"
-    return HttpResponse(output)
+    return render(request, 'relationship_app/list_books.html', {'books': books})
+
 
 class BookDetailView(DetailView):
     model = Book
