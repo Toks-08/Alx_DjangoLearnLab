@@ -11,7 +11,7 @@ def list_books(request):
 # Class-based view for library details
 class LibraryDetailView(DetailView):
     model = Library
-    template_name = "library_detail.html"  # top-level templates folder
+    template_name = "relationship_app/library_detail.html"  # top-level templates folder
     context_object_name = "library"
 
     def get_context_data(self, **kwargs):
