@@ -1,14 +1,23 @@
-from django.views.generic import DetailView
-from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Book, Library
+from .models import Book
+from django.views.generic.detail import DetailView
+from .models import Library
 
-def book_list_view(request):
+class LibraryDetailView(DetailView):
+    model = Library
+    template_name = "relationship_app/library_detail.html"
+    context_object_name = "library"
+
+    # Optionally, add books to the context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['books'] = self.object.books.all()  # all books for this library
+        return context
+
+
+def list_books(request):
     books = Book.objects.all()
-    return render(request, 'relationship_app/list_books.html', {'books': books})
-
-
-class BookDetailView(DetailView):
-    model = Book
-    template_name = 'list_books.html'  # the HTML template file
-    context_object_name = 'book'
+    output = ""
+    for book in books:
+        output += f"Title: {book.title}, Author: {book.author}\n"
+    return HttpResponse(output, content_type="text/plain")
