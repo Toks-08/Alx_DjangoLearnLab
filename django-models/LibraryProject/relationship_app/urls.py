@@ -15,5 +15,5 @@ urlpatterns = [
         next_page='login'  # redirect to login after logout
     ), name='logout'),
 
-    path('accounts/register/', views.signup, name='register'),
+    path('accounts/register/', views.register, name='register'),
 ]
