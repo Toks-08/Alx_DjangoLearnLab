@@ -1,7 +1,21 @@
-from django.shortcuts import render
+
 from django.views.generic.detail import DetailView
 from .models import Library
 from .models import Book
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Account created successfully. You can now log in.")
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'relationship_app/register.html', {'form': form})
 
 # Function-based view for listing all books
 def list_books(request):
