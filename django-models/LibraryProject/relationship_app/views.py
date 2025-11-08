@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from .models import Book
+from .models import Book, Library
 from django.views.generic.detail import DetailView
 from .models import Library
 
