@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 from .models import Book, Library
 from django.views.generic.detail import DetailView
 from .models import Library
@@ -15,9 +15,7 @@ class LibraryDetailView(DetailView):
         return context
 
 
+
 def list_books(request):
     books = Book.objects.all()
-    output = ""
-    for book in books:
-        output += f"Title: {book.title}, Author: {book.author}\n"
-    return HttpResponse(output, content_type="text/plain")
+    return render(request, "relationship_app/list_books.html", {"books": books})
