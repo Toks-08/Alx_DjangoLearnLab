@@ -189,6 +189,9 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 }
+# Tell Django that the request is secure when the proxy sets this header
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 # ------------------ HTTPS & Security Settings ------------------
 # SECURE_SSL_REDIRECT: Redirect all HTTP traffic to HTTPS
 # SECURE_HSTS_SECONDS: HSTS policy, instructs browsers to use HTTPS for 1 year
