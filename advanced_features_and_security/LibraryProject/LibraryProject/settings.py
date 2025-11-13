@@ -148,3 +148,56 @@ AUTH_USER_MODEL = 'bookshelf.CustomUser'
 # - CSP headers: Restrict external scripts, styles, and images
 # - All ORM queries use parameterized queries to prevent SQL injection
 # - CSRF token included in all forms
+# SECURITY SETTINGS FOR HTTPS
+
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security (HSTS)
+# Instruct browsers to only use HTTPS for the next 1 year (31536000 seconds)
+SECURE_HSTS_SECONDS = 31536000
+
+# Include all subdomains in HSTS policy
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+# Allow HSTS preload lists (optional but recommended for public sites)
+SECURE_HSTS_PRELOAD = True
+# Ensure cookies are sent only via HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+# Browser security headers
+X_FRAME_OPTIONS = 'DENY'               # Prevent clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True     # Prevent content type sniffing
+SECURE_BROWSER_XSS_FILTER = True       # Enable browser XSS protection
+server {
+    listen 80;
+    server_name yourdomain.com;
+    return 301 https://$host$request_uri;  # Redirect HTTP to HTTPS
+}
+
+server {
+    listen 443 ssl;
+    server_name yourdomain.com;
+
+    ssl_certificate /etc/ssl/certs/your_cert.crt;
+    ssl_certificate_key /etc/ssl/private/your_key.key;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;  # your Django app
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+# ------------------ HTTPS & Security Settings ------------------
+# SECURE_SSL_REDIRECT: Redirect all HTTP traffic to HTTPS
+# SECURE_HSTS_SECONDS: HSTS policy, instructs browsers to use HTTPS for 1 year
+# SECURE_HSTS_INCLUDE_SUBDOMAINS: HSTS for all subdomains
+# SECURE_HSTS_PRELOAD: Preload HTTPS in browsers
+# SESSION_COOKIE_SECURE: Ensures session cookies sent over HTTPS only
+# CSRF_COOKIE_SECURE: Ensures CSRF cookie sent over HTTPS only
+# X_FRAME_OPTIONS: Deny framing to prevent clickjacking
+# SECURE_CONTENT_TYPE_NOSNIFF: Prevent MIME type sniffing
+# SECURE_BROWSER_XSS_FILTER: Enable browser XSS filter
+
+
