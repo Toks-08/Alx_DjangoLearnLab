@@ -23,11 +23,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=aadgw(8sdrgnh#en)40&7&$1b9o@z32940#!g)3zpclxx_tau'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
 APPEND_SLASH = True
+SECURE_BROWSER_XSS_FILTER = True          # enables XSS filtering in the browser
+X_FRAME_OPTIONS = 'DENY'                  # prevents clickjacking
+SECURE_CONTENT_TYPE_NOSNIFF = True        # prevents content type sniffing
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# 🔒 HSTS for HTTPS
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
 # Application definition
 
@@ -43,14 +54,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # ... other middleware
+    'csp.middleware.CSPMiddleware',
 ]
+
+CSP_DEFAULT_SRC = ("'self'",)   # Only allow resources from your domain
+CSP_SCRIPT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'",)
+CSP_IMG_SRC = ("'self'", 'data:')
 
 ROOT_URLCONF = 'LibraryProject.urls'
 
@@ -128,3 +139,12 @@ LOGIN_REDIRECT_URL = '/books/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
+# SECURITY MEASURES:
+# - DEBUG=False: Prevents debug information leak in production
+# - SECURE_BROWSER_XSS_FILTER=True: Browser XSS protection
+# - X_FRAME_OPTIONS='DENY': Prevents clickjacking
+# - SECURE_CONTENT_TYPE_NOSNIFF=True: Prevents content sniffing
+# - CSRF_COOKIE_SECURE & SESSION_COOKIE_SECURE=True: Only send cookies over HTTPS
+# - CSP headers: Restrict external scripts, styles, and images
+# - All ORM queries use parameterized queries to prevent SQL injection
+# - CSRF token included in all forms

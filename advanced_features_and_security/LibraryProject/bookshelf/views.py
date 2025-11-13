@@ -6,6 +6,18 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from .models import Book
 from .forms import BookForm
+# bookshelf/views.py
+from django.shortcuts import render, get_object_or_404
+from .models import Book
+from .forms import BookForm
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def search_books(request):
+    query = request.GET.get('q', '')
+    # ✅ Safe: using ORM to filter
+    books = Book.objects.filter(title__icontains=query)
+    return render(request, 'bookshelf/book_list.html', {'books': books})
 
 # LibraryProject/bookshelf/views.py
 
