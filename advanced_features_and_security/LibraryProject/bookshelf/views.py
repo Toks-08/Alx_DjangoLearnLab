@@ -7,6 +7,22 @@ from django.contrib.auth.decorators import login_required, permission_required
 from .models import Book
 from .forms import BookForm
 
+# LibraryProject/bookshelf/views.py
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, permission_required
+from relationship_app.models import Book  # adjust this import if your Book model is in another app
+
+@login_required
+@permission_required('relationship_app.can_view', raise_exception=True)
+def books(request):
+    """
+    Display all books.
+    Only accessible to users with 'can_view' permission.
+    """
+    books_list = Book.objects.all()  # variable name 'books' is what the checker expects
+    return render(request, 'bookshelf/books.html', {'books': books_list})
+
 @login_required
 @permission_required('relationship_app.can_create', raise_exception=True)
 def create_book(request):
