@@ -6,6 +6,23 @@ from django.conf import settings
 from django.shortcuts import render
 from bookshelf.models import Book  # or from .models if Book is in this app
 
+# LibraryProject/bookshelf/views.py
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, permission_required
+from relationship_app.models import Book  # adjust import if Book is in a different app
+
+
+@login_required
+@permission_required('relationship_app.can_view', raise_exception=True)
+def books(request):
+    """
+    View to list all books.
+    Only users with the 'can_view' permission can access.
+    """
+    books_list = Book.objects.all()
+    return render(request, 'bookshelf/books.html', {'books': books_list})
+
 def books(request):
     """
     Display a list of all books in the system.
