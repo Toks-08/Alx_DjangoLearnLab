@@ -2,6 +2,17 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 # relationship_app/models.py
 from django.db import models
 from django.conf import settings
+# LibraryProject/bookshelf/views.py
+from django.shortcuts import render
+from bookshelf.models import Book  # or from .models if Book is in this app
+
+def books(request):
+    """
+    Display a list of all books in the system.
+    """
+    books_list = Book.objects.all()  # Query all books
+    return render(request, 'bookshelf/books.html', {'books': books_list})
+
 
 class Book(models.Model):
     title = models.CharField(max_length=255)
