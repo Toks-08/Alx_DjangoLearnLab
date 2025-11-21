@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -99,6 +100,30 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# settings.py
+
+# ... (Existing settings above, like INSTALLED_APPS, DATABASES, etc.)
+
+# --- DRF Configuration ---
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 1. SessionAuthentication: Needed for the browsable API and admin
+        'rest_framework.authentication.SessionAuthentication',
+
+        # 2. TokenAuthentication: Requires clients to send a token
+        #    in the HTTP Authorization header (e.g., 'Authorization: Token <key>')
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+
+    # Optional but highly recommended: Set default permissions
+    # to restrict access unless explicitly allowed.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+
+# --- End DRF Configuration ---
 
 
 # Internationalization
