@@ -17,8 +17,8 @@ class BookSerializer(serializers.ModelSerializer):
             current_year = date.today().year
             if value > current_year:
                 # Raise a ValidationError if the year is in the future
-                raise ValidationError(
-                    f"Publication year cannot be in the future. The latest valid year is {current_year}.")
+                raise serializers.ValidationError('Publication year must be greater than current year')
+
             return value
 
 #AuthorSerializer
@@ -31,4 +31,3 @@ class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         models = Author
         fields = ['id','name', 'book']
-∂
