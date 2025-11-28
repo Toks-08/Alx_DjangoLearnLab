@@ -21,6 +21,12 @@ class BookSerializer(serializers.ModelSerializer):
 
             return value
 
+        def validate_title(self, value):
+            # Title must exist and be at least 3 chars
+            if not value or len(value.strip()) < 3:
+                raise serializers.ValidationError("Title must be at least 3 characters long.")
+            return value.strip()
+
 #AuthorSerializer
 # Purpose: Serializes Author model instances. It includes a nested
 # representation of all related Book objects, providing a single,
