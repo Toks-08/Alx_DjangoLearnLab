@@ -6,15 +6,15 @@ from .serializers import BookSerializer
 from .permissions import  IsOwnerOrReadOnly
 
 # Create your views here.
-class BookListAPIView(generics.ListAPIView):
+class ListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-class BookDetailAPIView(generics.RetrieveAPIView):
+class DetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
 
-class BookCreateAPIView(generics.CreateAPIView):
+class CreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]  # require login to create
@@ -33,7 +33,7 @@ class BookCreateAPIView(generics.CreateAPIView):
             raise ValidationError({"title": "A book with this title and author already exists."})
 
 
-class BookUpdateAPIView(generics.UpdateAPIView):
+class UpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
@@ -47,7 +47,7 @@ class BookUpdateAPIView(generics.UpdateAPIView):
             raise ValidationError({"published_year": "Published year must be 1900 or later."})
 
 
-class BookDeleteAPIView(generics.DestroyAPIView):
+class DeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
