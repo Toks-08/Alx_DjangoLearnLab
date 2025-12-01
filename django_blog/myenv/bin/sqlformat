@@ -1,4 +1,4 @@
-#!/Users/Toks/Desktop/django/Alx_DjangoLearnLab/django_blog/myenv/bin/python3
+#!/Users/Toks/Desktop/django/Alx_DjangoLearnLab/django_blogd/myenv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
