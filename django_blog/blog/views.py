@@ -25,7 +25,7 @@ def register(request):
      else:
          form = CustomUserCreationForm()
 
-         return render(request, 'blog/registration.html', {'form': form})
+         return render(request, 'blog/register.html', {'form': form})
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField(required=True)
