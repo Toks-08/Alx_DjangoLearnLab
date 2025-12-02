@@ -6,8 +6,53 @@ from django.contrib.auth.models import User
 from django_blog import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.urls import reverse_lazy
+from .models import Post
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 # Create your views here.
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/post_list'
+    context_object_name = 'post'
+    ordering = ['published_date']
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post_detail'
+    ordering = ['published_date']
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    fields = ['title,', 'content']
+    template_name = 'blog/post_create'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
+    model = Post
+    fields = ['title,', 'content']
+    template_name = 'blog/post_form'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
+
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
+    model = Post
+    template_name = 'blog/post_delete'
+    success_url = '/'
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
