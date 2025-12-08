@@ -91,6 +91,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+'USER': 'your_database_user', # e.g., 'postgres', 'myuser', etc.
+        'PASSWORD': 'your_database_password', # Needed for USER
+        'HOST': 'localhost',
+        'PORT': '5432', # Common port for PostgreSQL; use '3306' for MySQL
+        # ---------------------------------------------
+    }
 }
 
 
