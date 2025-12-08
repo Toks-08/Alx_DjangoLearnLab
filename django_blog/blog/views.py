@@ -92,15 +92,8 @@ def profile(request):
         form = UserUpdateForm(instance=request.user)
 
     return render(request, 'blog/profile.html', {'form': form})
-
-from django import forms
 from .models import Comment
-
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = Comment
-        fields = ['content']
-
+from .forms import CommentForm
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
