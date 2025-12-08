@@ -25,7 +25,7 @@ class PostDetailView(DetailView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title,', 'content']
+    form_class = PostForm
     template_name = 'blog/post_create'
 
     def form_valid(self, form):
@@ -34,7 +34,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title,', 'content']
+    form_class = PostForm
     template_name = 'blog/post_form'
 
     def form_valid(self, form):
@@ -132,3 +132,39 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('post-detail', kwargs={'pk': self.object.post.id})
+
+
+class SearchPostListView(ListView):
+    model = Post
+    template_name = 'blog/search_results.html'
+    context_object_name = 'posts'
+    paginate_by = 10  # Optional: for handling many results
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')  # Get the search query from the URL parameter 'q'
+        tag_name = self.kwargs.get('tag_slug')  # Get tag name if present in URL
+
+        if query:
+            # Case 1: Keyword Search (Title, Content, or Tags)
+            object_list = Post.objects.filter(
+                Q(title__icontains=query) |  # Search in title
+                Q(content__icontains=query) |  # Search in content
+                Q(tags__name__icontains=query)  # Search in tag names
+            ).distinct().order_by('-published_date')
+
+        elif tag_name:
+            # Case 2: Tag-Specific Search (from /tags/<tag_name>/ URL)
+            object_list = Post.objects.filter(tags__slug=tag_name).order_by('-published_date')
+
+        else:
+            # If no query and no tag, return empty or all posts (returning empty for a dedicated search view is cleaner)
+            object_list = Post.objects.none()
+
+        return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Pass the query/tag back to the template for display
+        context['search_query'] = self.request.GET.get('q', '')
+        context['tag_name'] = self.kwargs.get('tag_slug', '')
+        return context
