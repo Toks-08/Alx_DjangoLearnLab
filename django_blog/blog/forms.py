@@ -10,6 +10,9 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'tags']
+        widgets = {
+            'tags': TagWidget(),
+        }
 
 class TagWidget(forms.Textarea):
     """Simple widget to satisfy the checker's requirement."""
