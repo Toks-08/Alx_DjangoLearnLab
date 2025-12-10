@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate
 from rest_framework import serializers
 from .models import CustomUser
 from django.contrib.auth.password_validation import validate_password
+from rest_framework.authtoken.models import Token
 
 class RegistrationSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
@@ -17,6 +18,7 @@ class RegistrationSerializer(serializers.Serializer):
     def create(self, validated_data):
         validated_data.pop('password2')
         user = CustomUser.objects.create_user(**validated_data)
+        Token.objects.create(user=user)
         return user
 
 class LoginSerializer(serializers.Serializer):
