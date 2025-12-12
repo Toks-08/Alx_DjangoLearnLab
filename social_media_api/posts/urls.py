@@ -5,7 +5,8 @@ from django.urls import path, include
 router = DefaultRouter()
 router.register(r'post', PostView)
 router.register(r'comment', CommentView)
+
 urlpatterns = [
-path('', include(router.urls)),
+    path('', include(router.urls)),
     
 ]
