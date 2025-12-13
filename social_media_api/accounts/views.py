@@ -9,7 +9,7 @@ from rest_framework.generics import RetrieveAPIView, UpdateAPIView
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import GenericAPIView
+from rest_framework import generics
 
 from rest_framework import status
 
@@ -54,7 +54,7 @@ class UpdateProfileView(UpdateAPIView):
         return self.request.user
 
 
-class FollowUserView(GenericAPIView):
+class FollowUserView(generics.GenericAPIView):
     # Set the permission requirement for all users accessing this view
     permission_classes = [permissions.IsAuthenticated]
 
@@ -81,7 +81,7 @@ class FollowUserView(GenericAPIView):
         )
 
 
-class UnfollowUserView(GenericAPIView):
+class UnfollowUserView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id, *args, **kwargs):
