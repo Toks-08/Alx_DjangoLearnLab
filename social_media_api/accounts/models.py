@@ -6,3 +6,4 @@ class CustomUser(AbstractUser):
     profile_picture = models.ImageField()
     followers = models.ManyToManyField('self', symmetrical=False, related_name='following')
 
+
