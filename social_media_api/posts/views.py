@@ -38,10 +38,10 @@ class FeedListView(ListAPIView):
     def get_queryset(self):
         #1. get the list of users the current user is following
         #2. request.following.all()returns a queryset of user objects
-        following_user = self.request.user.following.all()
+        following_users = self.request.user.following.all()
         #3. filter posts to include only those where the author is in the following_users set
         #4. this uses the '__in' lookup
-        queryset = Post.objects.filter(author__in=following_user).order_by('-created_at')
+        queryset = Post.objects.filter(author__in=following_users).order_by('-created_at')
         #5. order the post by creation date, most recent first
         return queryset
 
